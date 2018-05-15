@@ -1,0 +1,104 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="chat-wrapper">
+      <div class="row">
+      <div class="col col-xl-4">
+        <div class="contacts-wrapper">
+          <p>Hello</p>
+        </div>
+      </div>
+
+      <div class="col col-xl-8">
+       <div id='wrapper' class="wrapper">
+          {% if messages %}
+            {% for message in messages %}
+                {% if user == message.sender %}
+                  <div class="post">
+                    <div class="msg_wrapper sender-message"><p class="message">{{ message.msg|linebreaksbr}}</p></div>
+                  </div>
+                {% else %}
+                  <div class="post">
+                    {% load static %}
+                    <div><img class='user-image'src="{% static 'chat/img/octobiwan.jpg' %}"/></div>
+                    <div class="msg_wrapper receiver-message"><p class='message'>{{ message.msg}}</p></div>
+                    <div><i class='msg-time'>{{ message.send_time|time:"H:i" }}</i></div>
+                  </div>
+                {% endif %}
+
+            {% endfor %}
+          {% endif %}
+
+      </div>
+      <div class="">
+
+
+        <form class='send-form message-wrapper' action="." method='post'> {% csrf_token %}
+           <textarea id='chat-message-input' name='user_message' class="msg-input" placeholder="Write message here ..."></textarea>
+          <!-- <input class="msg-input" type="text" name='user_message'> -->
+          <input id='chat-message-submit' class="btn btn-success send-btn" type="submit" value="OK">
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+
+    var roomName = 'main'
+    var createMessage = function (text) {
+        msgs = document.getElementById('wrapper');
+        msg = document.createElement('div');
+        msg.className = "post";
+
+        paragraphWrapper = document.createElement('div');
+        paragraphWrapper.className = 'msg_wrapper sender-message';
+
+
+        paragraph = document.createElement('p');
+        paragraph.className = 'message';
+        paragraph.innerHTML = text;
+
+        paragraphWrapper.appendChild(paragraph);
+        msg.appendChild(paragraphWrapper);
+        msgs.appendChild(msg);
+    }
+
+    var chatSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/chat/');
+
+    chatSocket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        var message = data['message'];
+        // document.querySelector('#chat-log').value += (message + '\n');
+        createMessage(message)
+        var wr = document.getElementById('wrapper');
+        wr.scrollTop = wr.scrollHeight;
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        e.preventDefault()
+        var messageInputDom = document.querySelector('#chat-message-input');
+        var message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }));
+
+        messageInputDom.value = '';
+    };
+</script>
+{% endblock %}

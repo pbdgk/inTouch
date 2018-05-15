@@ -1,0 +1,20 @@
+{% extends "base/base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    
+    <div class="">
+        <form class='centered' action="." method='post'> {% csrf_token %}
+                <div class="fieldWrapper">
+                    {% if error_message %}
+                        <p>{{ error_message }}</p>
+                    {% endif %}
+                    <input type="text" name="username">
+                    <input type="password" name="password">
+                </div>
+            <button class='btn btn-success form-btn' type="submit">Login</button>
+        </form>
+    </div>
+
+{% endblock %}

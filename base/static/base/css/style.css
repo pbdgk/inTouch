@@ -1,0 +1,161 @@
+.fixed {
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+}
+
+
+
+.centered {
+  position: absolute;
+  left: 50%;
+  margin-top: 20%;
+  transform: translate(-50%, -50%);
+  padding: 0 70px;
+}
+.fieldWrapper{
+    width: 320px;
+}
+
+.form-btn{
+    /*text-align: center;*/
+    /*margin: auto;*/
+
+}
+::-webkit-input-placeholder {
+   text-align: center;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   text-align: center;  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   text-align: center;  
+}
+
+:-ms-input-placeholder {  
+   text-align: center; 
+}
+
+
+
+/* ================ Chat styles ================ */
+
+.chat-wrapper{
+  /*border: 2px solid red;*/
+}
+
+.contacts-wrapper{
+  margin: 1px;
+  border: 1px dotted pink;
+}
+
+.chat_input{
+    height: 100px; 
+    width:100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;   
+}
+
+.wrapper{
+    height: 800px;
+    background-color: #fee;
+    overflow-y: auto;
+}
+
+
+/* ================= MESSAGE BLOCK ================= */
+
+.post{
+    display: flex;
+    align-items: end;
+    font-size: 22px;
+    margin: 15px 10px;
+    max-width: 70%;
+    min-height: 30px;
+
+}
+
+.msg_wrapper{
+  padding: 8px 20px 8px 20px;
+  border-radius: 23px;    
+}
+.msg_wrapper p{
+  padding: 0;
+}
+  
+
+
+.msg_wrapper div{
+  /*display: inline-block;*/
+
+
+
+}
+
+.message{
+    display: inline;
+    word-wrap:break-word; 
+    /*margin-bottom: 0;*/
+}
+
+.sender-message{
+  background-color: green;
+  /*margin-left: auto;*/
+}
+
+.receiver-message{
+  background-color: yellow;
+}
+
+
+.msg-time{
+  font-size: 14px;
+  padding: 0 0 10px 5px;
+}
+
+.user-image{
+  height: 45px;
+  width: 45px;
+  border-radius: 25%;
+}
+/* ================= END MESSAGE BLOCK ================= */
+
+
+
+/* ================= FORM BLOCK ================= */
+
+.send-form{
+  margin-top: 10px;
+}
+
+/*
+.msg-input{
+  resize: none;
+  max-height: 200px;
+  min-width: 100px;
+}*/
+
+.send-btn{
+  
+}
+
+.msg-input{  
+  display: block;
+  box-sizing: padding-box;
+  overflow: hidden;
+resize:none;
+  padding: 15px 15px 5px 15px;
+  width: 100%;
+  font-size: 18px;
+  margin: 0 30px;
+
+
+  box-shadow: 2px 2px 8px rgba(black, .3);
+  border: 0;
+  border-bottom: 3px solid green;
+}
+/* ================= END FORM BLOCK ================= */
+
