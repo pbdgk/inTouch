@@ -7,6 +7,9 @@
       <div class="col col-xl-4">
         <div class="contacts-wrapper">
           <p>Hello</p>
+          <div id='root'>
+
+          </div>
         </div>
       </div>
 
@@ -70,9 +73,15 @@
         'ws://' + window.location.host +
         '/ws/chat/');
 
+    // if user left room
+    // document.getElementById('left-button').onclick = function() {
+       // alert("button was clicked");
+    // }​;​
+
     chatSocket.onmessage = function(e) {
         var data = JSON.parse(e.data);
         var message = data['message'];
+        console.log(data)
         // document.querySelector('#chat-log').value += (message + '\n');
         createMessage(message)
         var wr = document.getElementById('wrapper');
@@ -101,4 +110,6 @@
         messageInputDom.value = '';
     };
 </script>
+
+<script src="../../../react-app/src/index.js" charset="utf-8"></script>
 {% endblock %}
