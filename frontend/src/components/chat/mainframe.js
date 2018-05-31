@@ -64,12 +64,39 @@ class ChatMessage extends React.Component{
 
 
 class ChatInputBox extends React.Component{
+
+    constructor(props){
+        super(props)
+        this.state = {
+            message: ''
+        };
+        this.update = this.update.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.ref = React.createRef();
+    }
+
+    update(){
+        let message = this.state.message;
+        {
+            message = message.trim()
+            if (message !== '')
+            {
+                this.props.updateFn(message);
+                this.ref.current.value = '';
+            }
+        }
+    }
+
+    onChange(event){
+        this.setState({message: event.target.value})
+    }
+
     render(){
         return(
             <div className='chat-bottom-area'>
                 <div className="chat-input-area">
-                    <textarea></textarea>
-                    <button id='sendMessage'></button>
+                    <textarea ref={this.ref} onChange={this.onChange} id='sendMessage'/>
+                    <button onClick={this.update}/>
                 </div>
             </div>
         )
@@ -112,7 +139,7 @@ class ChatBar extends React.Component{
                             <ChatMessage key={uuid()} value={el}/>
                         ))}
                     </div>
-                    <ChatInputBox/>
+                    <ChatInputBox updateFn={this.props.updateFn}/>
                 </div>
             </div>
         )
@@ -126,10 +153,6 @@ class MainFrame extends React.Component{
         userId: window.django.userId,
         roomName: 'main'
     };
-
-
-
-
     render(){
         let chatContactsUrl = `/api/chat/contacts/${this.state.userId}`;
         let messagesEndpointUrl = `/api/messages/${this.state.roomName}`;
@@ -140,13 +163,12 @@ class MainFrame extends React.Component{
                 <DataProvider endpoint={chatContactsUrl}
                     render={data => <ContactBar value={data} />}/>
                 <DataProvider endpoint={messagesEndpointUrl}
-                    render={data => <ChatBar value={data} /> }/>
+                    render={(data, updateFn) => <ChatBar updateFn={updateFn} value={data} /> }/>
 
                 </div>
               </div>
         )
     }
-
 }
 
 

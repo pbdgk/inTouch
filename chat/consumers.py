@@ -9,7 +9,6 @@ import json
 def save_message_model(msg, sender, room=None):
     if room is None:
         room = Room.objects.get(room_name='main')
-        print(room)
     msg = Message(msg=msg, room=room, sender=sender)
     msg.save()
 
@@ -51,6 +50,7 @@ class MainChatConsumer(WebsocketConsumer):
     # Receive message from room group
     def chat_message(self, event):
             message = event['message']
+            print(message)
 
             # Send message to WebSocket
             self.send(text_data=json.dumps({

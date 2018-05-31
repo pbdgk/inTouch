@@ -6,13 +6,13 @@ import PropTypes from "prop-types";
 class DataProvider extends Component {
     constructor(props){
         super(props)
-
+        this.ws = this.addWs()
         this.state = {
           data: [],
           loaded: false,
           placeholder: "Loading...",
         };
-
+        this.handleUpdate = this.handleUpdate.bind(this)
 
     }
   static propTypes = {
@@ -29,18 +29,22 @@ class DataProvider extends Component {
       this.ws.close()
     }
 
+    handleUpdate(message){
+        this.ws.send(JSON.stringify({'message': message}));
+    }
 
     addWs(){
         const wsUrl = 'ws://' + window.location.host + '/ws/chat/';
-        this.ws = new WebSocket(wsUrl)
-        this.ws.onmessage = e => console.log(e)
-        this.ws.onerror = e => console.log(e)
-        this.ws.onclose = e => function(e) {
+        let ws = new WebSocket(wsUrl)
+        ws.onmessage = e => console.log(e.data)
+        ws.onerror = e => console.log('error')
+        ws.onclose = e => function(e) {
             var recTimeout = 3000
             console.error('Chat socket closed unexpectedly. Waiting ' + recTimeout);
             setTimeout(function(){start(websocketServerLocation)}, recTimeout);
             print('ok')
         };
+        return ws;
     }
 
     fetchData(){
@@ -56,7 +60,7 @@ class DataProvider extends Component {
 
     render() {
         const { data, loaded, placeholder } = this.state
-        return loaded ? this.props.render(data): <p>placeholder</p>;
+        return loaded ? this.props.render(data, this.handleUpdate): <p>placeholder</p>;
   }
 }
 export default DataProvider;
