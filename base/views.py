@@ -3,12 +3,35 @@ from django.http import Http404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
+from .forms import RegisterForm, ProfileForm
+from .models import Profile
 
-from .forms import RegisterForm
+
+def profile_view(request, pk):
+    print(request.method)
+    context = {'success': 'error'}
+    template_name = 'base/profile.html'
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid:
+            form.save()
+            print(form.data)
+            print('valid')
+            context['success'] = 'success'
+        else:
+            print(form.errors)
+    form = ProfileForm(instance=request.user.profile)
+    context['form'] = form
+    return render(request, template_name, context)
 
 
 def index(request):
     return render(request, 'base/index.html')
+
+
+# def profile_view(request, user_id):
+#     if request.method == 'GET':
+#         profile = get_object_or_404(Profile, pk=user_id)
 
 
 def register(request):

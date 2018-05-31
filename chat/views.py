@@ -6,26 +6,17 @@ from django.utils.safestring import mark_safe
 
 import json
 
-from .models import Message, Room
+from .models import Room
 
 # Create your views here.
 
 
 @login_required(login_url='/base/login')
 def chat(request):
-    room, created = Room.objects.get_or_create(
-        room_name='main'
-    )
+    room, created = Room.objects.get_or_create(room_name='main')
     if request.method == 'POST':
-        msg = request.POST.get('user_message').strip()
-        if msg:
-            user = request.user
-            message = Message(msg=msg, sender=user)
-            message.save()
-            return HttpResponseRedirect(reverse('chatapp:chat_page'))
-    messages = Message.objects.filter(room__room_name=room.room_name)
-    context = {'messages': messages}
-    return render(request, 'chat/chat.html', context)
+        return HttpResponseRedirect(reverse('chatapp:chat_page'))
+    return render(request, 'chat/chat.html')
 
 
 def index(request):

@@ -1,10 +1,35 @@
 from django.contrib.auth.models import User
-from django.contrib.auth.validators import ASCIIUsernameValidator
+from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+from django.urls import reverse
 
 
-class MyUser(User):
+def user_directory_path(instance, filename):
+    return 'photos/user_{0}/{1}'.format(instance.user.id, filename)
 
-    username_validator = ASCIIUsernameValidator()
 
-    class Meta():
-        proxy = True
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(max_length=500, blank=True)
+    location = models.CharField(max_length=30, blank=True)
+    birthdate = models.DateField(null=True, blank=True)
+    image = models.ImageField(upload_to=user_directory_path, default='frontend/static/img/octobiwan.jpg')
+
+    def get_absolute_url(self):
+        return reverse('profile', kwargs={'user_id': self.user.pk})
+
+    def __str__(self):
+        return self.user.username
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
