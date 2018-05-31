@@ -1,0 +1,24 @@
+
+Table.propTypes = {
+  data: PropTypes.array.isRequired
+};
+  {data.map(el => (
+            <div key={el.id}>
+                <div key={uuid()}>{el.msg}</div>
+                <div key={uuid()}>{el.send_time}</div>
+                <div key={uuid()}>{el.sender}</div>
+            </div>
+          ))}
+
+                    <div><img class='user-image'src="{% static 'chat/img/octobiwan.jpg' %}"/></div>
+
+                    <div class="msg_wrapper receiver-message"><p class='message'>{{ message.msg}}</p></div>
+                    <div><i class='msg-time'>{{ message.send_time|time:"H:i" }}</i></div>
+
+
+
+
+
+            <div className='msg_wrapper receiver-message' key={uuid()}><p>{el.msg}</p></div>
+            <div key={uuid()}>{el.send_time}</div>
+            <div key={uuid()}>{el.sender}</div>

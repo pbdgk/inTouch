@@ -1,0 +1,7 @@
+        this.setState((prevState, props) => ({
+            data: this.state.data + msg
+    }));
+
+
+
+                    
