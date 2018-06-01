@@ -4,4 +4,9 @@
 
 
 
-                    
+
+
+        this.setState({ data: [...this.state.data, message]})
+
+
+                

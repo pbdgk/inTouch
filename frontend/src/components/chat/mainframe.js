@@ -2,13 +2,14 @@ import React from 'react';
 import Moment from "moment";
 import shortid from "shortid";
 
+
+import {BrowserRouter as Router, Link} from 'react-router-dom'
+
+
 import PropTypes from "prop-types";
 import DataProvider from "../DataProvider";
 
 const uuid = shortid.generate;
-
-
-
 
 
 class ContactCard extends React.Component{
@@ -28,8 +29,6 @@ class ContactCard extends React.Component{
         )
     }
 };
-
-
 
 
 class MessageBox extends React.Component{
@@ -55,9 +54,14 @@ class MessageBox extends React.Component{
 class ChatMessage extends React.Component{
     render(){
         return(
-                <div className='chat-message'>
-                    <MessageBox value={this.props.value}/>
-                </div>
+
+            <Router>
+                <Link to='/chat/1'>
+                    <div className='chat-message'>
+                        <MessageBox value={this.props.value}/>
+                    </div>
+                </Link>
+            </Router>
         );
     };
 };
@@ -104,7 +108,6 @@ class ChatInputBox extends React.Component{
 }
 
 
-
 class ContactBar extends React.Component{
     render(){
         return(
@@ -127,8 +130,8 @@ class ContactBar extends React.Component{
     }
 };
 
-class ChatBar extends React.Component{
 
+class ChatBar extends React.Component{
     render(){
         let data = this.props.value;
         return(
@@ -148,7 +151,6 @@ class ChatBar extends React.Component{
 
 
 class MainFrame extends React.Component{
-
     state = {
         userId: window.django.userId,
         roomName: 'main'
@@ -162,6 +164,7 @@ class MainFrame extends React.Component{
 
                 <DataProvider endpoint={chatContactsUrl}
                     render={data => <ContactBar value={data} />}/>
+
                 <DataProvider endpoint={messagesEndpointUrl}
                     render={(data, updateFn) => <ChatBar updateFn={updateFn} value={data} /> }/>
 
@@ -170,8 +173,6 @@ class MainFrame extends React.Component{
         )
     }
 }
-
-
 
 
 export default MainFrame;
