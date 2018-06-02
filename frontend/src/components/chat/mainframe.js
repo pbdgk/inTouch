@@ -3,7 +3,7 @@ import Moment from "moment";
 import shortid from "shortid";
 
 
-import {BrowserRouter as Router, Link} from 'react-router-dom'
+import {BrowserRouter as Router, Link, Route } from 'react-router-dom'
 
 
 import PropTypes from "prop-types";
@@ -54,14 +54,14 @@ class MessageBox extends React.Component{
 class ChatMessage extends React.Component{
     render(){
         return(
-
-            <Router>
+                <div>
                 <Link to='/chat/1'>
                     <div className='chat-message'>
                         <MessageBox value={this.props.value}/>
                     </div>
                 </Link>
-            </Router>
+                <Route path='/1' render={()=>(<h1>Hello</h1>)}/>
+                </div>
         );
     };
 };
@@ -160,19 +160,29 @@ class MainFrame extends React.Component{
         let messagesEndpointUrl = `/api/messages/${this.state.roomName}`;
         return(
             <div className="container main-frame">
-              <div className="row">
-
-                <DataProvider endpoint={chatContactsUrl}
-                    render={data => <ContactBar value={data} />}/>
-
-                <DataProvider endpoint={messagesEndpointUrl}
-                    render={(data, updateFn) => <ChatBar updateFn={updateFn} value={data} /> }/>
-
-                </div>
+                <Router>
+                    <div className="row">
+                        <DataProvider endpoint={chatContactsUrl}
+                            render={data => <ContactBar value={data} />}/>
+                        <DataProvider endpoint={messagesEndpointUrl}
+                            render={(data, updateFn) =>
+                                {
+                                    <WSocketBox value={data}>
+                                        <ChatBar updateFn={updateFn} value={data} /> }/>
+                                    </WSocketBox>
+                            }
+                    </div>
+                </Router>
               </div>
         )
     }
 }
 
+
+    <DataPro url>
+        <WsBox>
+            <container/>
+        </WsBox>
+    </DataPro>
 
 export default MainFrame;

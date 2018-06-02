@@ -8,8 +8,6 @@ class WSocketBox extends Component{
         this.ws = this.addWs()
         this.state = {
           data: [],
-          loaded: false,
-          placeholder: "Loading...",
         };
         this.handleUpdate = this.handleUpdate.bind(this)
         this.updateState = this.updateState.bind(this)

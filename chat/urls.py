@@ -6,7 +6,7 @@ from . import views
 app_name = 'chatapp'
 
 urlpatterns = [
-    path('', views.chat, name='chat_page'),
+    re_path(r'^\d*[/]*$', views.chat, name='chat_page'),
     path('index', views.index, name='index'),
     re_path(r'^(?P<room_name>[^/]+)/$', views.room, name='room'),
 ]
