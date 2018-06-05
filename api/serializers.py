@@ -1,8 +1,11 @@
-from rest_framework import serializers
 from django.contrib.auth.models import User
 
-from chat.models import Message
+from rest_framework import serializers
+
+from chat.models import Message, Contact, Room
 from base.models import Profile
+
+
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -13,11 +16,11 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
 
-    profile = ProfileSerializer()
+    # profile = ProfileSerializer()
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'profile']
+        fields = ['id', 'username', 'email']
 
     def update(self, instance, validated_data):
         instance.username = validated_data.get('username', instance.username)
@@ -38,3 +41,46 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = ['id', 'msg', 'room', 'sender', 'send_time']
+
+
+class LastMessageSerializer(serializers.ModelSerializer):
+    sender = UserSerializer()
+
+    class Meta:
+        model = Message
+        fields = ['sender', 'msg', 'send_time']
+
+
+class RoomSerializer(serializers.ModelSerializer):
+    # users = UserSerializer(many=True, read_only=True)
+    last_message = serializers.SerializerMethodField()
+    contact = serializers.SerializerMethodField()
+
+    def get_last_message(self, obj):
+        last_message = obj.message_set.last()
+        if not last_message:
+            return None
+        return LastMessageSerializer(last_message).data
+
+    def get_contact(self, obj):
+        owner = self.context.get('owner')
+        print('owner', owner)
+        users = list(obj.users.all())
+        print('USERS'*10, users)
+        users.remove(owner)
+        contact = users[0]
+        print(contact)
+        return UserSerializer(contact).data
+
+    class Meta:
+        model = Room
+        fields = ['id', 'room_name', 'mode', 'last_message', 'contact']
+
+
+class ContactSerializer(serializers.ModelSerializer):
+    contacts = UserSerializer(many=True, read_only=True)
+    current_user = UserSerializer()
+
+    class Meta:
+        model = Contact
+        fields = ['contacts', 'current_user']

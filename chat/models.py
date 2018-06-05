@@ -1,9 +1,35 @@
 from django.conf import settings
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
 
-# Create your models here.
+
+class Contact(models.Model):
+    contacts = models.ManyToManyField(settings.AUTH_USER_MODEL)
+    current_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='owner',
+        null=True,
+        on_delete=models.CASCADE,
+        )
+
+    @classmethod
+    def add_contact(cls, current_user, new_contact):
+        contact, created = cls.objects.get_or_create(
+            current_user=current_user
+        )
+        contact.contacts.add(new_contact)
+
+        contact, created = cls.objects.get_or_create(
+            current_user=new_contact
+        )
+        contact.contacts.add(current_user)
+
+    @classmethod
+    def remove_contact(cls, current_user, new_contact):
+        contact, created = cls.objects.get_or_create(
+            current_user=current_user
+        )
+        contact.contacts.remove(new_contact)
 
 
 def get_sentinet_user():
@@ -29,7 +55,7 @@ class Message(models.Model):
 
 class Room(models.Model):
     room_name = models.CharField(max_length=120)
-    users = models.ManyToManyField(User)
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL)
     mode = models.BooleanField(default=False)
 
     def __str__(self):

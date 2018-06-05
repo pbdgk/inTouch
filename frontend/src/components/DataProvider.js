@@ -38,7 +38,6 @@ class WSocketBox extends Component{
             setTimeout(function(){start(websocketServerLocation)}, recTimeout);
             print('ok')
         };
-        console.log(ws);
         return ws;
     }
 
@@ -80,10 +79,11 @@ class DataProvider extends Component {
         this.setState({data: [...this.state.data, message]})
     }
 
+
     addWs(){
         const wsUrl = 'ws://' + window.location.host + '/ws/chat/';
         let ws = new WebSocket(wsUrl)
-        ws.onopen = e => console.log(e)
+        ws.onopen = e => console.log('open: ' + e)
         ws.onmessage = e => this.updateState(JSON.parse(e.data).message)
         ws.onerror = e => console.log('error')
         ws.onclose = e => function(e) {
@@ -92,10 +92,8 @@ class DataProvider extends Component {
             setTimeout(function(){start(websocketServerLocation)}, recTimeout);
             print('ok')
         };
-        console.log(ws);
         return ws;
     }
-
     fetchData(){
         fetch(this.props.endpoint)
           .then(response => {

@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import Http404
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 
 from .forms import RegisterForm, ProfileForm
-from .models import Profile
 
 
 def profile_view(request, pk):
@@ -27,11 +26,6 @@ def profile_view(request, pk):
 
 def index(request):
     return render(request, 'base/index.html')
-
-
-# def profile_view(request, user_id):
-#     if request.method == 'GET':
-#         profile = get_object_or_404(Profile, pk=user_id)
 
 
 def register(request):

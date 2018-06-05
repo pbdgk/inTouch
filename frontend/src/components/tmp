@@ -9,4 +9,23 @@
         this.setState({ data: [...this.state.data, message]})
 
 
-                
+
+
+
+    constructor(props){
+        super(props)
+        state = {
+            contactList: this.props.value || [],
+        }
+    }
+
+    updateContactList(newContact){
+        this.setState({contactList: [...this.state.contactList, newContact]})
+    }
+                        <AddContact/>
+                        {contacts.map(el => (
+                            <RoomCard key={uuid()} value={el}/>
+                        ))}
+
+                        <DataProvider endpoint={messagesEndpointUrl}
+                            render={(data, updateFn) => <ChatBar updateFn={updateFn} value={data} /> }/>
