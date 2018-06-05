@@ -46,12 +46,9 @@ class ContactBox extends React.Component{
     render(){
         let data = this.props.value;
         let contacts = data.contacts;
-        console.log(contacts)
         return(
             <div>
-                {
-                    contacts.map(el => (<Contact key={uuid()} value={el}/>))
-                }
+                {contacts.map(el => (<Contact key={uuid()} value={el}/>))}
             </div>
         )
     }

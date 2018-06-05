@@ -23,12 +23,9 @@ class ChatMessage extends React.Component{
     render(){
         return(
                 <div>
-                <Link to='/chat/1'>
                     <div className='chat-message'>
                         <MessageBox value={this.props.value}/>
                     </div>
-                </Link>
-                <Route path='/1' render={()=>(<h1>Hello</h1>)}/>
                 </div>
         );
     };
@@ -80,38 +77,91 @@ class ChatBar extends React.Component{
     render(){
         let data = this.props.value;
         return(
-            <div className="col-sm">
-                <div className='wrapper-bar'>
-                    <div className='chat-messages-wrapper'>
-                        {data.map(el => (
-                            <ChatMessage key={uuid()} value={el}/>
-                        ))}
-                    </div>
-                </div>
-                <ChatInputBox updateFn={this.props.updateFn}/>
+            <div className='chat-messages-wrapper'>
+                {data.map(el => (
+                    <ChatMessage key={uuid()} value={el}/>
+                ))}
             </div>
         )
     }
 };
 
+class Profile extends React.Component {
+  state = {
+      path: null,
+      data: null,
+      isFetched: false,
+      profileOrError: null,
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.match.params.handle !== prevState.path) {
+      return {
+        path: nextProps.match.params.handle,
+        data: null,
+        isFetched: false,
+      };
+    }
+    return null;
+    }
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.isFetched === false) {
+      // At this point, we're in the "commit" phase, so it's safe to load the new data.
+        this.fetchData(this.state.path);
+    }
+  }
+    componentDidMount () {
+        const { handle } = this.props.match.params
+        this.fetchData(handle)
+    }
+
+    fetchData(handle){
+        fetch(`/api/messages/${handle}`)
+          .then((res) => {return res.json()})
+          .then((data => {
+              this.setState({ data: data, isFetched: true});
+      }))
+    }
+  render() {
+      if (!this.state.isFetched && !this.state.data){
+      return(
+        <div className="col-sm">
+            <div className='wrapper-bar'>
+            </div>
+            <ChatInputBox updateFn={this.props.updateFn}/>
+        </div>
+      )
+      } else{
+        return(
+        <div className="col-sm">
+                 <div className='wrapper-bar'>
+                     <ChatBar value={this.state.data}/>
+                </div>
+                <ChatInputBox updateFn={this.props.updateFn}/>
+        </div>
+            )
+        }
+    }
+}
+
 
 class MainFrame extends React.Component{
     state = {
         userId: window.django.userId,
-        roomName: 'main'
     };
     render(){
         let roomsUrl = `/api/room_list/${this.state.userId}`;
-        let messagesEndpointUrl = `/api/messages/${this.state.roomName}`;
         return(
-            <div className="container main-frame">
-                <Router>
+            <Router>
+                <div className="container main-frame">
                     <div className="row">
                         <DataProvider endpoint={roomsUrl}
                             render={data => <RoomBar value={data} />}/>
+                        <Route exact path='/chat/' render={() => (<div>Choose your contact to start message</div>)} />
+                        <Route path='/chat/:handle' component={Profile} />
                     </div>
-                </Router>
-            </div>
+                </div>
+            </Router>
         )
     }
 }

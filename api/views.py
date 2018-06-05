@@ -14,6 +14,7 @@ from .serializers import (
     UserSerializer,
     ContactSerializer,
     RoomSerializer,
+    ProfileSerializer,
 )
 
 
@@ -32,7 +33,6 @@ def add_contact(request):
         return Response({'created': False}, status=status.HTTP_400_BAD_REQUEST)
 
     return Response(status=status.HTTP_404_NOT_FOUND)
-
 
 
 @api_view(['GET'])
@@ -94,11 +94,11 @@ def profile(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        profile = UserSerializer(user)
+        profile = ProfileSerializer(user.profile)
         return Response(profile.data)
 
     elif request.method == 'PUT':
-        profile = UserSerializer(user, data=request.data)
+        profile = ProfileSerializer(user.profile, data=request.data)
         if profile.is_valid():
             profile.save()
             return Response(profile.data)

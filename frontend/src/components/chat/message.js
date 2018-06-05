@@ -11,10 +11,8 @@ const uuid = shortid.generate;
 
 class MessageBox extends React.Component{
     render(){
-        console.log('ey')
-        console.log(this.props)
-        var dt = this.props.value.time ?
-            Moment(this.props.value.time).format('HH:mm') : ''
+        var dt = this.props.value.send_time ?
+            Moment(this.props.value.send_time).format('HH:mm') : ''
         return(
             <div className="card-body text-primary">
             <div className='space-btw-wrapper'>

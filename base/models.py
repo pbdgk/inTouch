@@ -15,7 +15,7 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, blank=True)
     location = models.CharField(max_length=30, blank=True)
     birthdate = models.DateField(null=True, blank=True)
-    image = models.ImageField(upload_to=user_directory_path, default='frontend/static/img/octobiwan.jpg')
+    image = models.ImageField(upload_to=user_directory_path, default='/frontend/img/octobiwan.jpg')
 
     def get_absolute_url(self):
         return reverse('profile', kwargs={'user_id': self.user.pk})

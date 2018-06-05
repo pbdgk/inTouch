@@ -6,17 +6,22 @@ from chat.models import Message, Contact, Room
 from base.models import Profile
 
 
-
-
 class ProfileSerializer(serializers.ModelSerializer):
+    email = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
+
+    def get_email(self, obj):
+        return obj.user.email
+
+    def get_username(self, obj):
+        return obj.user.username
+
     class Meta:
         model = Profile
-        fields = ['bio', 'location', 'birthdate']
+        fields = ['bio', 'location', 'birthdate', 'image', 'email', 'username',]
 
 
 class UserSerializer(serializers.ModelSerializer):
-
-    # profile = ProfileSerializer()
 
     class Meta:
         model = User
@@ -64,12 +69,9 @@ class RoomSerializer(serializers.ModelSerializer):
 
     def get_contact(self, obj):
         owner = self.context.get('owner')
-        print('owner', owner)
         users = list(obj.users.all())
-        print('USERS'*10, users)
         users.remove(owner)
         contact = users[0]
-        print(contact)
         return UserSerializer(contact).data
 
     class Meta:

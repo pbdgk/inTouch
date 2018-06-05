@@ -58,9 +58,9 @@ class ProfileForm extends React.Component{
         this.setState({
             username: data.username,
             email: data.email,
-            bio: data.profile.bio || '',
-            city: data.profile.location || '',
-            birthdate: data.profile.birthdate || ''
+            bio: data.bio || '',
+            city: data.location || '',
+            birthdate: data.birthdate || ''
         })
     }
 
@@ -77,11 +77,9 @@ class ProfileForm extends React.Component{
                 'id': self.id,
                 'username': self.username,
                 'email': self.email,
-                'profile': {
-                    'bio' : self.bio,
-                    'location': self.city,
-                    'birthdate': self.birthdate
-                }
+                'bio' : self.bio,
+                'location': self.city,
+                'birthdate': self.birthdate
             })
         })
         .then((resp) => {return resp.json()})

@@ -34,7 +34,7 @@ class ImageComponent extends React.Component{
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'X-CSRFTOKEN': this.state.token,
             },
-            body: formData
+            body: JSON.stringify(formData)
         })
         .then(response => {
             console.log(response);

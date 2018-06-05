@@ -2,6 +2,7 @@ import React from 'react';
 import shortid from "shortid";
 
 
+import {BrowserRouter as Router, Link, Route } from 'react-router-dom'
 import DataProvider from "../DataProvider";
 import MessageBox from "./message";
 import DropDownContactBtn from "./contactbar"
@@ -13,25 +14,26 @@ class RoomCard extends React.Component{
         let message = this.props.value
         let info = message.last_message ? {
             msg: message.last_message.msg,
-            time: message.last_message.send_time,
+            send_time: message.last_message.send_time,
             sender: message.last_message.sender.username,
             contact: message.contact
         }:{
             msg: 'No messages yet',
-            time: '',
+            send_time: '',
             sender: '',
             contact: message.contact
 
         }
         return(
             // <div className="card border-primary contact-card-bounds image-bounds">
-            <div className="card contact-card-bounds image-bounds">
-              <div className="card-header">
-                <div className='username'>{info.contact.username}</div>
-              </div>
 
-             <MessageBox value={info}/>
-
+            <div rn={message.room_name} className="card contact-card-bounds image-bounds">
+                <Link to={`/chat/${message.room_name}`}>
+                    <div className="card-header">
+                        <div className='username'>{info.contact.username}</div>
+                    </div>
+                    <MessageBox value={info}/>
+                </Link>
             </div>
         )
     }
