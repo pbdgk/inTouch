@@ -1,22 +1,20 @@
 from django.urls import path
 
 from .views import (
-    messages,
+    Messages,
+    Rooms,
+    RoomsCreate,
+    Contacts,
+    ContactsConnect,
     profile,
-    UploadView,
-    contact,
-    room_list,
-    create_room,
-    add_contact
 )
 
 
 urlpatterns = [
+    path('messages/<str:room_id>/', Messages.as_view()),
+    path('rooms/<int:pk>/', Rooms.as_view()),
+    path('rooms/create/<int:pk>/', RoomsCreate.as_view()),
+    path('contacts/<int:pk>/', Contacts.as_view()),
+    path('contacts/add/<int:pk>/', ContactsConnect.as_view()),
     path('profile/<int:pk>/', profile),
-    path('profile/upload-data/', UploadView.as_view()),
-    path('contact/<int:pk>/', contact),
-    path('addcontact/', add_contact),
-    path('room_list/<int:pk>/', room_list),
-    path('createroom/<int:receiver_pk>/<int:sender_pk>', create_room),
-    path('messages/<str:room_name>/', messages),
 ]

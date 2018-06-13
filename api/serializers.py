@@ -45,44 +45,32 @@ class MessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Message
-        fields = ['id', 'msg', 'room', 'sender', 'send_time']
-
-
-class LastMessageSerializer(serializers.ModelSerializer):
-    sender = UserSerializer()
-
-    class Meta:
-        model = Message
-        fields = ['sender', 'msg', 'send_time']
+        fields = ['msg', 'sender', 'send_time']
 
 
 class RoomSerializer(serializers.ModelSerializer):
-    # users = UserSerializer(many=True, read_only=True)
-    last_message = serializers.SerializerMethodField()
+    msg = serializers.SerializerMethodField()
     contact = serializers.SerializerMethodField()
 
-    def get_last_message(self, obj):
+    def get_msg(self, obj):
         last_message = obj.message_set.last()
         if not last_message:
             return None
-        return LastMessageSerializer(last_message).data
+        return MessageSerializer(last_message).data
 
     def get_contact(self, obj):
         owner = self.context.get('owner')
-        users = list(obj.users.all())
-        users.remove(owner)
-        contact = users[0]
+        contact = obj.users.all().exclude(pk=owner.pk).first()
         return UserSerializer(contact).data
 
     class Meta:
         model = Room
-        fields = ['id', 'room_name', 'mode', 'last_message', 'contact']
+        fields = ['id', 'room_name', 'msg', 'contact']
 
 
 class ContactSerializer(serializers.ModelSerializer):
     contacts = UserSerializer(many=True, read_only=True)
-    current_user = UserSerializer()
 
     class Meta:
         model = Contact
-        fields = ['contacts', 'current_user']
+        fields = ['contacts']
