@@ -11,7 +11,7 @@ from .models import Room
 # Create your views here.
 
 
-@login_required(login_url='/base/login')
+@login_required(login_url='/login')
 def chat(request):
     room, created = Room.objects.get_or_create(room_name='main')
     if request.method == 'POST':
