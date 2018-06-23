@@ -1,6 +1,11 @@
-class UserRepositoryError(Exception):
+
+class RepositoryError(Exception):
     pass
 
 
-class ContactsRepositoryError(Exception):
+class UserRepositoryError(RepositoryError):
+    pass
+
+
+class ContactRepositoryError(RepositoryError):
     pass
