@@ -1,23 +1,14 @@
-from asgiref.sync import async_to_sync
-from channels.generic.websocket import WebsocketConsumer
-from .models import Room, Message
-from api.serializers import MessageSerializer
-
-
 import json
 
+from asgiref.sync import async_to_sync
+from channels.generic.websocket import WebsocketConsumer
 
-def save_message_model(msg, sender, room=None):
-    if room is None:
-        room = Room.objects.get(room_name='main')
-    msg = Message(msg=msg, room=room, sender=sender)
-    msg.save()
-    return msg
+from chat.repositories.repository import MessageRepository
 
 
 class MainChatConsumer(WebsocketConsumer):
     def connect(self):
-        self.room_name = 'main_room'
+        self.room_name = 'main'
         self.room_group_name = 'chat_%s' % self.room_name
 
         # Join room group
@@ -25,6 +16,7 @@ class MainChatConsumer(WebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
+        print('channel-name: ', self.channel_name)
 
         self.accept()
 
@@ -37,18 +29,10 @@ class MainChatConsumer(WebsocketConsumer):
 
     # Receive message from WebSocket
     def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        if message:
-            user = self.scope['user']
-            msg = save_message_model(message, user)
-            serialized = MessageSerializer(msg)
-            async_to_sync(self.channel_layer.group_send)(
-                self.room_group_name,
-                {
-                    'type': 'chat_message',
-                    'message': serialized.data
-                }
+        repository = MessageRepository()
+        message = repository.get_ws_message(text_data, scope=self.scope)
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name, message
             )
 
     # Receive message from room group
