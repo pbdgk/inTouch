@@ -6,7 +6,8 @@ from .views import (
     RoomsCreate,
     Contacts,
     ContactsConnect,
-    profile,
+    Profile,
+    ProfileTemp,
 )
 
 
@@ -16,5 +17,6 @@ urlpatterns = [
     path('rooms/create/<int:pk>/', RoomsCreate.as_view()),
     path('contacts/<int:pk>/', Contacts.as_view()),
     path('contacts/add/<int:pk>/', ContactsConnect.as_view()),
-    path('profile/<int:pk>/', profile),
+    path('profiles/<int:pk>/', Profile.as_view()),
+    path('profiles/upload_image/<int:pk>/', ProfileTemp.as_view())
 ]

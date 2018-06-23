@@ -1,86 +1,72 @@
-from django.contrib.auth.models import User
-
-from rest_framework import status, permissions
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser
 
-
-from .serializers import (
-    MessageSerializer,
-    ContactSerializer,
-    ProfileSerializer,
+from chat.repositories.repository import (
+    ContactRepository,
+    RoomRepository,
+    MessageRepository,
+    ProfileRepository
     )
-from base.models import Profile
-from chat.models import Message, Contact, Room
-from chat.repositories.repository import ContactsRepository, RoomRepository
+
+from .serializers import ProfileSerializer
 
 
 class Messages(APIView):
     def get(self, request, room_id):
-        messages = Message.objects.filter(room__id=room_id)
-        serializer = MessageSerializer(messages, many=True)
-        return Response(serializer.data)
-
-
-class ContactsConnect(APIView):
-    def post(self, request, pk):
-        repository = ContactsRepository(Contact, User)
-        response, status = repository.handle(request, sender_id=pk)
+        repository = MessageRepository()
+        response, status = repository.get_messages(room_id)
         return Response(response, status=status)
 
 
 class Rooms(APIView):
     def get(self, request, pk):
-        room_repository = RoomRepository(Room, User)
+        room_repository = RoomRepository()
         response, status = room_repository.get_rooms(request, pk)
         return Response(response, status=status)
 
 
 class RoomsCreate(APIView):
     def post(self, request, pk):
-        room_repository = RoomRepository(Room, User)
+        room_repository = RoomRepository()
         response, status = room_repository.create_room(request, pk)
+        return Response(response, status=status)
+
+
+class ContactsConnect(APIView):
+    def post(self, request, pk):
+        repository = ContactRepository()
+        response, status = repository.connect(request, sender_id=pk)
         return Response(response, status=status)
 
 
 class Contacts(APIView):
     def get(self, request, pk):
-        user = User.objects.get(pk=pk)
-        contact = Contact.objects.filter(current_user=user).first()
-        serialized_contact = ContactSerializer(contact)
-        data = serialized_contact.data
-        return Response(data)
+        repository = ContactRepository()
+        response, status = repository.get_contacts(pk)
+        return Response(response, status=status)
 
 
-@api_view(['GET', 'PUT'])
-@permission_classes((permissions.AllowAny,))
-def profile(request, pk):
-    try:
-        user = User.objects.get(pk=pk)
-    except User.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+class Profile(APIView):
+    def get(self, request, pk):
+        repository = ProfileRepository()
+        response, status = repository.get(pk)
+        return Response(response, status=status)
 
-    if request.method == 'GET':
-        profile = ProfileSerializer(user.profile)
-        return Response(profile.data)
-
-    elif request.method == 'PUT':
-        profile = ProfileSerializer(user.profile, data=request.data)
-        if profile.is_valid():
-            profile.save()
-            return Response(profile.data)
-        else:
-            return Response(profile.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, pk):
+        repository = ProfileRepository()
+        response, status = repository.update(request, pk)
+        return Response(response, status=status)
 
 
-class UploadView(APIView):
-    def get_queryset(self):
-        queryset = Profile.objects.all()
-        return queryset
+class ProfileTemp(APIView):
 
-    def post(self, request, format=None):
-        print(dir(request))
-        print(request.data)
-        return Response({'hello': 'post'})
+    parser_classes = (MultiPartParser,)
+    serializer_class = ProfileSerializer
+
+    def post(self, request, pk):
+        print(request.FILES)
+        return Response('good', status=200)
+
+    def get(self, request, pk):
+        return Response('bad', status=202)
