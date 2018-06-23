@@ -1,6 +1,7 @@
-__pycache__/
+**/__pycache__/
 db.sqlite3
 .git
 .idea/
 media/
-frontend/static/
+**/frontend/static/
+node_modules/
