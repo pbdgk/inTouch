@@ -13,28 +13,26 @@ class ImageComponent extends React.Component{
 
     componentWillMount() {
         const { cookies } = this.props;
-        let token = cookies.get('csrftoken') || '';
-        this.setState({ token });
+        const token = cookies.get('csrftoken') || '';
+        this.setState({ token: token });
     }
 
     fileChangedHandler = (event) => {
-      this.setState({selectedFile: event.target.files[0]})
+      this.setState({ selectedFile: event.target.files[0] })
     }
     uploadHandler = () => {
-        {console.log(this.state)}
+      const self = this.state;
         const formData = new FormData()
-        formData.append('myFile', this.state.selectedFile)
-        const url = `/api/profile/upload-image/${window.django.userId}/`;
-        axios('/api/profile/upload-data/', {
-            method: 'post',
+        formData.append('image', this.state.selectedFile)
+        const url = `/api/v1/profiles/upload_image/${window.django.userId}/`;
+        fetch(url, {
+            method: 'POST',
             headers: {
-                'Access-Control-Allow-Origin':'*',
                 'Accept': 'application/json',
-                // 'Content-Type': 'multipart/form-data',
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFTOKEN': this.state.token,
+                'Content-Type': 'multipart/form-data',
+                'X-CSRFTOKEN': self.token,
             },
-            body: JSON.stringify(formData)
+            body: formData
         })
         .then(response => {
             console.log(response);
