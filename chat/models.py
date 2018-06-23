@@ -54,7 +54,7 @@ class Message(models.Model):
 
 
 class Room(models.Model):
-    room_name = models.CharField(max_length=120)
+    room_name = models.CharField(max_length=120, blank=True, default='')
     users = models.ManyToManyField(settings.AUTH_USER_MODEL)
     mode = models.BooleanField(default=False)
 

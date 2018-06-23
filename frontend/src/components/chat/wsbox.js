@@ -1,10 +1,11 @@
+import React from 'react';
 
-export default class WSocketBox extends Component{
+export default class WSocketBox extends React.Component{
     constructor(props){
         super(props)
         this.ws = this.addWs()
         this.state = {
-          data: [],
+          data: this.props.value,
         };
         this.handleUpdate = this.handleUpdate.bind(this)
         this.updateState = this.updateState.bind(this)
@@ -37,6 +38,10 @@ export default class WSocketBox extends Component{
             print('ok')
         };
         return ws;
+    }
+
+    render(){
+        return (this.props.render.data, this.handleUpdate)
     }
 
 }

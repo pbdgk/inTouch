@@ -30,7 +30,8 @@ class DataProvider extends Component {
             return response.json();
           })
           .then(data => {
-              this.setState({data: data, loaded: true })});
+              this.setState({data: data, loaded: true })
+            });
     };
 
     render() {
