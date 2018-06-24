@@ -11,7 +11,10 @@ def profile_view(request, pk):
     context = {'success': 'error'}
     template_name = 'base/profile.html'
     if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        form = ProfileForm(request.POST,
+                           request.FILES,
+                           instance=request.user.profile
+                           )
         if form.is_valid:
             form.save()
             print(form.data)
@@ -35,7 +38,10 @@ def register(request):
             username = form.cleaned_data.get('username')
             email = form.cleaned_data.get('email')
             password1 = form.cleaned_data.get('password1')
-            user = User.objects.create_user(username=username, email=email, password=password1)
+            user = User.objects.create_user(username=username,
+                                            email=email,
+                                            password=password1
+                                            )
             user.save()
             login(request, user)
             return redirect('base:index')
