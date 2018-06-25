@@ -1,7 +1,8 @@
-**/__pycache__/
-db.sqlite3
-.git
 .idea/
-media/
+**/__pycache__/
 **/frontend/static/
+package-lock.json
+media/
+db.sqlite3
 node_modules/
+.git
