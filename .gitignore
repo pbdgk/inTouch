@@ -1,8 +1,42 @@
-.idea/
-**/__pycache__/
-**/frontend/static/
-package-lock.json
-media/
-db.sqlite3
-node_modules/
 .git
+
+# PyCharm configs
+.idea
+
+# virtual environments
+venv
+package-lock.json
+
+# Python files
+*.pyc
+__pycache__
+
+# Python Notebook dot files
+.ipynb*
+
+
+# Secret environment settings
+# .env
+# env
+
+# Node and Webpack files
+node_modules
+npm-debug.log
+webpack-stats*
+
+# Static assests
+**/frontend/static/
+staticfiles
+static_cdn
+media_cdn
+media
+assets
+
+# Ignore sqlite
+db.sqlite3
+
+# Apple files
+.DS_Store
+
+# temporary dir for development
+temp
