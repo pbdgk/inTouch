@@ -16,14 +16,14 @@ Simple chat web application.
 
 ### Installation
 
-Requires [Docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/) to run
-Using compose file format v.3
-Check [Compatibility matrix](https://docs.docker.com/compose/compose-file/compose-versioning/#compatibility-matrix)
+Requires [Docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/) to run  
+Using compose file format v.3  
+Check [Compatibility matrix](https://docs.docker.com/compose/compose-file/compose-versioning/#compatibility-matrix)  
 
 
 
 #### Atention !!!
-> frontend part not included to docker build yet
+> frontend part not included to docker build yet  
 > create bundles manualy
 
 ```sh
