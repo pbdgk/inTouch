@@ -50,7 +50,6 @@ class ContactRepository(UserRepository):
         except UserRepositoryError:
             return None, STATUS_400
         contact = Contact.objects.filter(current_user=user).first()
-        print(contact)
         response = ContactSerializer(contact).data
         return response, STATUS_200
 
