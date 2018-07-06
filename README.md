@@ -7,39 +7,15 @@ Simple chat web application.
 
 ### backend
 
-  - django v.2
+  - django 2
   - django-channels
-  - django framework
+  - djangorestframework
 ### frontend
-  -  Reactjs
-  -  webpack
-
-### Installation
-
-Requires [Docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/) to run  
-Using compose file format v.3  
-Check [Compatibility matrix](https://docs.docker.com/compose/compose-file/compose-versioning/#compatibility-matrix)  
-
+  -  React
+  -  Redux
+  -  Webpack
 
 
 #### Atention !!!
-> frontend part not included to docker build yet  
-> create bundles manualy
-
-```sh
-npm install
-npm start
-```
-
-Create docker container and compose
-
-```sh
-$ make build
-$ make up
-```
-
-Production environment
-
-```sh
-$ not implemented yet!
-```
+> This branch don't work yet.
+> Under total development
